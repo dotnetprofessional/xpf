@@ -1,0 +1,1 @@
+﻿DELETE FROM TestTable WHERE ID >=10

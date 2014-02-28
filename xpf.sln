@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{76F6D31A-6CB8-427C-A43B-00AB1DE26EF2}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpf.FileSystem", "xpf.FileSystem\xpf.FileSystem.csproj", "{0229F335-8C09-46CA-A28F-A381E2A3AFA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpf.FileSystem.Spec", "xpf.FileSystem.Spec\xpf.FileSystem.Spec.csproj", "{2E79182F-1D4C-409E-A012-F6CF56E577FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpf.Http", "xpf.Http\xpf.Http.csproj", "{D15F96DE-0321-40F8-AF9E-C103FE069B3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpf.IO", "xpf.IO\xpf.IO.csproj", "{3330FE83-0988-42AC-8B41-D40C645748F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpf.IO.Script", "xpf.IO.Script\xpf.IO.Script.csproj", "{051AF920-36F9-4179-B0F9-5F19A16E2147}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpf.IO.Script.Test", "xpf.IO.Script.Test\xpf.IO.Script.Test.csproj", "{B1BC7FF4-6628-468B-88EB-B52434E2C8E1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0229F335-8C09-46CA-A28F-A381E2A3AFA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0229F335-8C09-46CA-A28F-A381E2A3AFA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0229F335-8C09-46CA-A28F-A381E2A3AFA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0229F335-8C09-46CA-A28F-A381E2A3AFA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E79182F-1D4C-409E-A012-F6CF56E577FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E79182F-1D4C-409E-A012-F6CF56E577FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E79182F-1D4C-409E-A012-F6CF56E577FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E79182F-1D4C-409E-A012-F6CF56E577FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D15F96DE-0321-40F8-AF9E-C103FE069B3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D15F96DE-0321-40F8-AF9E-C103FE069B3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D15F96DE-0321-40F8-AF9E-C103FE069B3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D15F96DE-0321-40F8-AF9E-C103FE069B3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3330FE83-0988-42AC-8B41-D40C645748F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3330FE83-0988-42AC-8B41-D40C645748F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3330FE83-0988-42AC-8B41-D40C645748F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3330FE83-0988-42AC-8B41-D40C645748F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{051AF920-36F9-4179-B0F9-5F19A16E2147}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{051AF920-36F9-4179-B0F9-5F19A16E2147}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{051AF920-36F9-4179-B0F9-5F19A16E2147}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{051AF920-36F9-4179-B0F9-5F19A16E2147}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1BC7FF4-6628-468B-88EB-B52434E2C8E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1BC7FF4-6628-468B-88EB-B52434E2C8E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1BC7FF4-6628-468B-88EB-B52434E2C8E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1BC7FF4-6628-468B-88EB-B52434E2C8E1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45
+	EndGlobalSection
+EndGlobal
