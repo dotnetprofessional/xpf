@@ -12,23 +12,33 @@ namespace xpf.Http
 {
     public class Http : IHttp
     {
-        public Http()
+ 
+        public Http(HttpMessageHandler messageHandler)
         {
-            ClientHandler = new HttpClientHandler();
+            MessageHandler = messageHandler;
         }
 
-        public Http(HttpClientHandler clientHandler)
+        protected HttpMessageHandler MessageHandler { get; set; }
+
+        public async Task<HttpResponse<TR>> GetAsync<TR>(HttpRequest request) 
+            where TR : class
         {
-            ClientHandler = clientHandler;
-        }
+            HttpClient client;
+            if (MessageHandler == null)
+            {
+                var clientHandler = new System.Net.Http.HttpClientHandler();
 
-        protected HttpClientHandler ClientHandler { get; set; }
+                clientHandler.AllowAutoRedirect = request.AllowAutoRedirect;
 
-        public async Task<HttpResponse<TR>> GetAsync<TR>(HttpRequest request)
-        {
-            ClientHandler.AllowAutoRedirect = request.AllowAutoRedirect;
-
-            var client = new HttpClient(ClientHandler);
+                client = new HttpClient();
+            }
+            else
+            {
+                client = new HttpClient(this.MessageHandler)
+                {
+                    BaseAddress = new Uri("http://www.dummysite.com")
+                };
+            }
 
             if (request.AuthenticationToken != null)
             {
@@ -53,16 +63,19 @@ namespace xpf.Http
 
             response = await client.GetAsync(request.Url);
             TR result = default(TR);
+  
+            var rawContent = await new StreamReader(await response.Content.ReadAsStreamAsync()).ReadToEndAsync();
+
             string error = "";
             if (response.StatusCode == HttpStatusCode.OK)
-                result = await ConvertContentToType<TR>(response.Content, request.RequestFormat);
+                result = await ConvertHttpContentToType<TR>(rawContent, request.RequestFormat);
             else
             {
-                error = await ConvertContentToType<string>(response.Content, HttpFormat.Text);
+                error = rawContent;
             }
 
             // Depending on the format c
-            var requestResponse = new HttpResponse<TR>(response.StatusCode, result, error);
+            var requestResponse = new HttpResponse<TR>(request.Url, response.StatusCode, result, error, rawContent);
             // Transfer the headers too
             foreach (var header in response.Headers)
                 requestResponse.Headers.Add(header.Key, new HttpHeader {Key = header.Key, Value = new List<string>(header.Value)});
@@ -70,7 +83,7 @@ namespace xpf.Http
             return requestResponse;
         }
 
-        public async Task<HttpResponse<TR>> PostAsync<TR, TC>(HttpRequest request, TC data)
+        public async Task<HttpResponse<TR>> PostAsync<TR, TC>(HttpRequest request, TC data) where TR : class
         {
             var clientHandler = new HttpClientHandler();
 
@@ -107,14 +120,16 @@ namespace xpf.Http
 
             HttpResponseMessage response = await client.PostAsync(request.Url, content);
             TR result = default(TR);
+            var rawContent = await new StreamReader(await response.Content.ReadAsStreamAsync()).ReadToEndAsync();
+
             string error = "";
             if (response.StatusCode == HttpStatusCode.OK)
-                result = await ConvertContentToType<TR>(response.Content, request.RequestFormat);
+                result = await ConvertHttpContentToType<TR>(rawContent, request.RequestFormat);
             else
             {
-                error = await ConvertContentToType<string>(response.Content, HttpFormat.Text);
+                error = rawContent;
             }
-            return new HttpResponse<TR>(response.StatusCode, result, error);
+            return new HttpResponse<TR>(request.Url, response.StatusCode, result, error, rawContent);
         }
 
         public string GetDomain(Uri uri)
@@ -133,33 +148,33 @@ namespace xpf.Http
             return domain;
         }
 
-        public async Task<UriDetail> GetWebPageDetail(Uri uri)
-        {
-            UriDetail detail = null;
-            await Task.Run(async () =>
-            {
-                var uriDetail = new UriDetail {Uri = uri};
+        //public async Task<UriDetail> GetWebPageDetail(Uri uri)
+        //{
+        //    UriDetail detail = null;
+        //    await Task.Run(async () =>
+        //    {
+        //        var uriDetail = new UriDetail {Uri = uri};
 
-                // Fetch the html for the Uri
-                HttpResponse<string> htmlResponse = await GetAsync<string>(new HttpRequest {Url = uri.AbsoluteUri});
-                if (htmlResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    string html = htmlResponse.Content;
-                    // Parse the details out of the html
-                    uriDetail.Title = GetMatchText(html, @"<title>([\s\S]*)</title>");
-                    uriDetail.Description = GetMatchText(html, "<meta name=\"description\"(?:.*)content=\"(.*)\"");
-                    uriDetail.Keywords = GetMatchText(html, "<meta name=\"keywords\" content=\"(.*)\"");
-                    uriDetail.Html = html;
-                    uriDetail.ThumbnailUrl = GetWebPageThumbnailUrl(uri);
-                    uriDetail.SupportsFlash = !string.IsNullOrWhiteSpace(GetMatchText(html, @"(\.swf|flashplayer)"));
+        //        // Fetch the html for the Uri
+        //        HttpResponse<string> htmlResponse = await GetAsync<string>(new HttpRequest {Url = uri.AbsoluteUri});
+        //        if (htmlResponse.StatusCode == HttpStatusCode.OK)
+        //        {
+        //            string html = htmlResponse.Content;
+        //            // Parse the details out of the html
+        //            uriDetail.Title = GetMatchText(html, @"<title>([\s\S]*)</title>");
+        //            uriDetail.Description = GetMatchText(html, "<meta name=\"description\"(?:.*)content=\"(.*)\"");
+        //            uriDetail.Keywords = GetMatchText(html, "<meta name=\"keywords\" content=\"(.*)\"");
+        //            uriDetail.Html = html;
+        //            uriDetail.ThumbnailUrl = GetWebPageThumbnailUrl(uri);
+        //            uriDetail.SupportsFlash = !string.IsNullOrWhiteSpace(GetMatchText(html, @"(\.swf|flashplayer)"));
 
-                    detail = uriDetail;
-                }
-                else
-                    throw new IOException(htmlResponse.Error);
-            });
-            return detail;
-        }
+        //            detail = uriDetail;
+        //        }
+        //        else
+        //            throw new IOException(htmlResponse.Error);
+        //    });
+        //    return detail;
+        //}
 
         public string GetWebPageThumbnailUrl(Uri uri, ThumbnailSize size = ThumbnailSize.Large200x150)
         {
@@ -247,32 +262,22 @@ namespace xpf.Http
             return sessionCookie;
         }
 
-        async Task<TC> ConvertContentToType<TC>(HttpContent content, HttpFormat format)
-        {
-            return await ConvertHttpStreamToType<TC>(await content.ReadAsStreamAsync(), format);
-        }
+        public async Task<TC> ConvertHttpContentToType<TC>(string content, HttpFormat format) where TC : class
 
-        public async Task<TC> ConvertHttpStreamToType<TC>(Stream stream, HttpFormat format)
         {
             object result = null;
 
             switch (format)
             {
                 case HttpFormat.Text:
-                    result = await new StreamReader(stream).ReadToEndAsync();
+                    result = content;
                     break;
                 case HttpFormat.XML:
-                    using (stream)
-                    {
-                        result = XmlSerializer.DeserializeFromStream<TC>(stream);
-                    }
+                    result = XmlSerializer.Deserialize<TC>(content);
                     break;
 
                 case HttpFormat.JSON:
-                    using (stream)
-                    {
-                        result = JsonConvert.DeserializeObject<TC>(await new StreamReader(stream).ReadToEndAsync());
-                    }
+                    result = JsonConvert.DeserializeObject<TC>(content);
                     break;
             }
 

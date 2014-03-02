@@ -1,22 +1,30 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace xpf.Http
 {
     internal static class XmlSerializer
     {
-        public static T DeserializeFromStream<T>(Stream stream, params Type[] extraTypes)
+        public static T Deserialize<T>(string xml, params Type[] extraTypes)
+            where T : class
         {
-            // Note: Throws System.InvalidOperationException exception "There is an error in XML document (0, 0)." when stream is empty or contains invalid xml.
-
-            //XmlSerializer xser = new XmlSerializer(typeof(T), extraTypes);
-            var xser = new DataContractSerializer(typeof (T), extraTypes);
-            var entity = (T)xser.ReadObject(stream);
+            T entity;
+            using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
+            {
+                entity = DeserializeFromStream<T>(ms, extraTypes);
+            }
             return entity;
-
         }
 
+        public static T DeserializeFromStream<T>(Stream stream, params Type[] extraTypes)
+            where T : class
+        {
+            System.Xml.Serialization.XmlSerializer xser = new System.Xml.Serialization.XmlSerializer(typeof(T), extraTypes);
+            var entity = xser.Deserialize(stream) as T;
+            return entity;
+        }
         public static void SerializeToStream<T>(Stream stream, T entity)
         {
             var xser = new DataContractSerializer(typeof (T));
