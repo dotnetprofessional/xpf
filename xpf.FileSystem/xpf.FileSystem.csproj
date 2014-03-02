@@ -60,6 +60,7 @@
     <Compile Include="WriteFileStream.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="xpf.FileSystem.nuspec" />
     <None Include="_FIleSystemModel.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

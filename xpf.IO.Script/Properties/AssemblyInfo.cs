@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("xpf.IO.Script")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A powerful library for executing SQL Scripts against a database from emedded resource files. This library is especially useful for integration testing with its ability to reference other scripts within a script like SQL Server :r support.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("dotNetProfessional")]
 [assembly: AssemblyProduct("xpf.IO.Script")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyCopyright("Copyright © dotNetProfessional.com 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("0.0.1.0")]
+[assembly: AssemblyFileVersion("0.0.1.0")]
+
