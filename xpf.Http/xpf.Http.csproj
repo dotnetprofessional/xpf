@@ -48,6 +48,8 @@
     <Compile Include="HttpJsonRequest.cs" />
     <Compile Include="HttpRequest.cs" />
     <Compile Include="HttpResponse.cs" />
+    <Compile Include="HttpJsonDataContractResponse.cs" />
+    <Compile Include="HttpXmlDataContractResponse.cs" />
     <Compile Include="HttpXmlRequest.cs" />
     <Compile Include="IHttp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
