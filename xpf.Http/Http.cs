@@ -12,7 +12,10 @@ namespace xpf.Http
 {
     public class Http : IHttp
     {
- 
+        public Http()
+        {
+        }
+
         public Http(HttpMessageHandler messageHandler)
         {
             MessageHandler = messageHandler;
@@ -26,7 +29,7 @@ namespace xpf.Http
             HttpClient client;
             if (MessageHandler == null)
             {
-                var clientHandler = new System.Net.Http.HttpClientHandler();
+                var clientHandler = new HttpClientHandler();
 
                 clientHandler.AllowAutoRedirect = request.AllowAutoRedirect;
 
