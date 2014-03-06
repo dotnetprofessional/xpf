@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace xpf.Http
 {
@@ -26,6 +27,16 @@ namespace xpf.Http
                 }
             }
             return xml;
+        }
+
+        public override T Deserialize<T>(string data)
+        {
+            using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(data)))
+            {
+                System.Xml.Serialization.XmlSerializer xser = new System.Xml.Serialization.XmlSerializer(typeof(T));
+                var entity = xser.Deserialize(ms);
+                return (T)entity;
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace xpf.Http
 {
@@ -16,15 +17,14 @@ namespace xpf.Http
 
         public override string Serialize<T>(T data)
         {
-            var ser = new DataContractJsonSerializer(data.GetType());
-            string json = "";
-            using (var ms = new MemoryStream())
-            {
-                ser.WriteObject(ms, data);
-                var bytes = ms.ToArray();
-                json = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-            }
-            return json;
+            return JsonConvert.SerializeObject(data);
+        }
+
+        public override T Deserialize<T>(string data)
+        {
+            var entity = JsonConvert.DeserializeObject<T>(data);
+
+            return entity;
         }
     }
 }

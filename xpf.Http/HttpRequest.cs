@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace xpf.Http
 {
@@ -29,6 +30,16 @@ namespace xpf.Http
             return data as string;
         }
 
+        public virtual T Deserialize<T>(string data)
+        {
+            return (T)(data as object);
+        }
+
         public bool AllowAutoRedirect { get; set; }
+
+        public virtual string ProcessError(string data)
+        {
+            return data;
+        }
     }
 }

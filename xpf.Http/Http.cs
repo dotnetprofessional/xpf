@@ -71,7 +71,7 @@ namespace xpf.Http
 
             string error = "";
             if (response.StatusCode == HttpStatusCode.OK)
-                result = await ConvertHttpContentToType<TR>(rawContent, request.RequestFormat);
+                result = request.Deserialize<TR>(rawContent);
             else
             {
                 error = rawContent;
@@ -127,10 +127,10 @@ namespace xpf.Http
 
             string error = "";
             if (response.StatusCode == HttpStatusCode.OK)
-                result = await ConvertHttpContentToType<TR>(rawContent, request.RequestFormat);
+                result = request.Deserialize<TR>(rawContent);
             else
             {
-                error = rawContent;
+                error = request.ProcessError(rawContent);
             }
             return new HttpResponse<TR>(request.Url, response.StatusCode, result, error, rawContent);
         }
@@ -263,53 +263,6 @@ namespace xpf.Http
                 throw new IOException(htmlResponse.Error);
 
             return sessionCookie;
-        }
-
-        public async Task<TC> ConvertHttpContentToType<TC>(string content, HttpFormat format) where TC : class
-
-        {
-            object result = null;
-
-            switch (format)
-            {
-                case HttpFormat.Text:
-                    result = content;
-                    break;
-                case HttpFormat.XML:
-                    result = XmlSerializer.Deserialize<TC>(content);
-                    break;
-
-                case HttpFormat.JSON:
-                    result = JsonConvert.DeserializeObject<TC>(content);
-                    break;
-            }
-
-            return (TC) result;
-        }
-
-        Dictionary<string, string> GetHeaderValues(string headerValue)
-        {
-            var values = new Dictionary<string, string>();
-            string[] headerParts = headerValue.Split(';');
-            foreach (string h in headerParts)
-            {
-                string[] keyValues = h.Split('=');
-                values.Add(keyValues[0], keyValues[1]);
-            }
-
-            return values;
-        }
-
-        string GetMatchText(string text, string pattern)
-        {
-            Match match = Regex.Match(text, pattern);
-            if (match.Success && match.Groups.Count == 2)
-            {
-                string value = match.Groups[1].Value;
-                value = value.Replace(Environment.NewLine, "").Trim();
-                return value;
-            }
-            return "";
         }
     }
 }
