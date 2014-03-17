@@ -6,9 +6,9 @@ using System.Xml.Serialization;
 
 namespace xpf.IO
 {
-    // Serialize().AsXml<T>(object)
-    // Serialize().AsJson<T>(object)
-    // Deserialize().FromJson<T>(object)
+    // Serializer().AsXml<T>(object)
+    // Serializer().AsJson<T>(object)
+    // Serializer().FromJson<T>(object)
     public class Serializer
     {
         public static string Serialize<T>(T data)
