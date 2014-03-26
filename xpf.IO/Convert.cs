@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace xpf.IO
 {
@@ -41,5 +42,11 @@ namespace xpf.IO
             }
             return entity;
         }
-}
+
+        public static T FromJsonToInstance<T>(this string json)
+            where T : class
+        {
+            return JsonConvert.DeserializeObject<T>(json);
+        }
+    }
 }
