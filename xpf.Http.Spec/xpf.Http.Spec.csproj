@@ -27,6 +27,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\xpf.Http.Spec.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -82,10 +83,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="FeatureAttribute.cs" />
     <Compile Include="HttpSpec.cs" />
     <Compile Include="NancyTesting.cs" />
     <Compile Include="SpecHttpModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Story_Reuse_Code.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

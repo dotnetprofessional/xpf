@@ -1,0 +1,9 @@
+﻿FileSystem - Specification
+--------------------------
+- Support multiple files systems such as Physical(disk), OneDrive, DropBox, RamDrive etc
+- Fluent API
+- Cross Platform
+- Mockable
+- Possibly use a driver model, which doesnt have fluent API but has the core commands for the file system which the API delegates to.
+- Possibly have file systems be automatically discovered? Possibly too slow as the object will be used and disposed of regularly.
+`

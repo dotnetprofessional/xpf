@@ -27,13 +27,19 @@ namespace xpf.IO
         public static T FromXmlToInstance<T>(this string xml, params Type[] extraTypes)
             where T : class
         {
+            return new MemoryStream(Encoding.UTF8.GetBytes(xml)).FromXmlStreamToInstance<T>();
+        }
+
+        public static T FromXmlStreamToInstance<T>(this Stream stream, params Type[] extraTypes) 
+            where T : class
+        {
             T entity;
-            using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
+            using (stream)
             {
-                var xser = new XmlSerializer(typeof (T), extraTypes);
-                entity = xser.Deserialize(ms) as T;
+                var xser = new XmlSerializer(typeof(T), extraTypes);
+                entity = xser.Deserialize(stream) as T;
             }
             return entity;
         }
-    }
+}
 }
