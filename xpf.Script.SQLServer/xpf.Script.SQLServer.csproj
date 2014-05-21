@@ -4,18 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{051AF920-36F9-4179-B0F9-5F19A16E2147}</ProjectGuid>
+    <ProjectGuid>{7EAC429E-69C1-46F5-A640-613891935496}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>xpf.IO</RootNamespace>
-    <AssemblyName>xpf.IO.Script</AssemblyName>
+    <RootNamespace>xpf.Scripting.SQLServer</RootNamespace>
+    <AssemblyName>xpf.Script.SQLServer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\xpf\</SolutionDir>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -34,7 +30,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\xpf.IO.Script.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common">
@@ -49,25 +44,34 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="xpf.IO, Version=0.0.1.4, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="xpf.IO">
       <HintPath>..\packages\xpf.IO.0.0.1.4\lib\portable-net45+wp80+win+MonoAndroid10+MonoTouch10\xpf.IO.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Script.cs" />
+    <Compile Include="ReaderResult.cs" />
+    <Compile Include="ReaderResultField.cs" />
+    <Compile Include="SqlDatabase.cs" />
+    <Compile Include="SqlScript.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="xpf.IO.Script.nuspec" />
+    <None Include="Web.config.transform" />
+    <None Include="app.config.transform" />
+    <None Include="packages.config" />
+    <None Include="xpf.Script.SQLServer.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\xpf.Script\xpf.Script.csproj">
+      <Project>{2607f4a4-6c76-43ee-aa93-0441394e3559}</Project>
+      <Name>xpf.Script</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
