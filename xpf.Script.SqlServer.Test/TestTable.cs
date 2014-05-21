@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using FluentAssertions;
-using FluentAssertions;
 
 namespace xpf.IO.Test
 {

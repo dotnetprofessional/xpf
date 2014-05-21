@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Text;
 using xpf.IO;
@@ -13,7 +14,7 @@ namespace xpf.Scripting.SQLServer
         public ReaderResult(IDataReader dataReader)
         {
             this._dataReader = dataReader;
-            this.Fields = new Dictionary<string, object>();
+            this.Fields = new FieldList();
             this.Field = new ReaderResultField(dataReader);
 
             this.RecordsAffected = dataReader.RecordsAffected;
@@ -29,10 +30,10 @@ namespace xpf.Scripting.SQLServer
             var nextResult = this._dataReader.Read();
             if (nextResult)
             {
-                this.Fields = new Dictionary<string, object>(); 
+                this.Fields = new FieldList();
                 for (int i = 0; i < _dataReader.FieldCount; i++)
                 {
-                    this.Fields.Add(_dataReader.GetName(i), _dataReader[0]);
+                    this.Fields.Add(new Field(_dataReader.GetName(i), _dataReader[0]));
                 }
             }
 
@@ -44,7 +45,7 @@ namespace xpf.Scripting.SQLServer
             return this._dataReader.NextResult();
         }
 
-        public Dictionary<string, object> Fields { get; private set; } 
+        public FieldList Fields { get; private set; } 
         public void Dispose()
         {
             this._dataReader.Dispose();
@@ -95,4 +96,5 @@ namespace xpf.Scripting.SQLServer
 
 
     }
+
 }

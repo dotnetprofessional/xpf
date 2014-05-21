@@ -37,8 +37,8 @@ namespace xpf.Scripting.SqlServer.Test
                 .WithOut(new { outParam1 = DbType.Int32 })
                 .Execute();
 
-            Assert.AreEqual(2, result.Properties.OutParam1);
-            Assert.AreEqual(2, result.Properties.MyParam1);
+            Assert.AreEqual(2, result.Property.OutParam1);
+            Assert.AreEqual(2, result.Property.MyParam1);
         }
     }
 }

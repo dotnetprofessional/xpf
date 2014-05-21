@@ -32,7 +32,7 @@ namespace xpf.IO.Test
                 .WithOut(new { outParam1 = DbType.Int32 })
                 .Execute();
 
-            Assert.AreEqual(1, result.Properties.OutParam1);
+            Assert.AreEqual(1, result.Property.OutParam1);
         }
 
         [TestMethod]
@@ -47,7 +47,7 @@ namespace xpf.IO.Test
                 .WithOut(new { outParam1 = DbType.Int32 })
                 .Execute();
 
-            Assert.AreEqual(2, result.Properties.OutParam1);
+            Assert.AreEqual(2, result.Property.OutParam1);
         }
 
         [TestMethod]
@@ -70,7 +70,7 @@ namespace xpf.IO.Test
                     .Execute();
 
 
-                Assert.AreEqual("Record X", result.Properties.OutParam2);
+                Assert.AreEqual("Record X", result.Property.OutParam2);
             }
         }
 
@@ -95,7 +95,7 @@ namespace xpf.IO.Test
                     .Execute();
 
 
-                Assert.AreEqual("Record X", result.Properties.OutParam2);
+                Assert.AreEqual("Record X", result.Property.OutParam2);
             }
         }
 
@@ -117,7 +117,7 @@ namespace xpf.IO.Test
                     .WithOut(new { RowCount = DbType.Int32})
                     .Execute();
 
-                Assert.AreEqual(3, result.Properties.RowCount);
+                Assert.AreEqual(3, result.Property.RowCount);
             }
         }
 
@@ -140,7 +140,7 @@ namespace xpf.IO.Test
                     .WithOut(new { RowCount = DbType.Int32 })
                     .Execute();
 
-                Assert.AreEqual(3, result.Properties.RowCount);
+                Assert.AreEqual(3, result.Property.RowCount);
             }
         }
 
@@ -150,9 +150,6 @@ namespace xpf.IO.Test
             // Essentially the same test as Execute_ScriptNameOnly
             using (var x = new TransactionScope())
             {
-                string embeddedScriptName = "Execute_ScriptNameOnly.sql";
-
-
                 // Execute an update on the table
                 new Script()
                     .Database()
@@ -168,7 +165,7 @@ namespace xpf.IO.Test
                     .Execute();
 
 
-                Assert.AreEqual("Record X", result.Properties.OutParam2);
+                Assert.AreEqual("Record X", result.Property.OutParam2);
             }
         }
 
@@ -185,7 +182,7 @@ namespace xpf.IO.Test
                 .WithOut(new[] { "outParam1"})
                 .Execute();
 
-            Assert.AreEqual(2, result.Properties.OutParam1);
+            Assert.AreEqual(2, result.Property.OutParam1);
         }
 
 
@@ -302,12 +299,12 @@ namespace xpf.IO.Test
 
                 // Verify that the results and properties have been applied correctly
                 Assert.AreEqual(2, actual.Results.Count);
-                Assert.AreEqual(12, actual.Properties.Id);
-                Assert.AreEqual(12, actual.Results[0].Properties.Id);
-                Assert.AreEqual(13, actual.Results[1].Properties.Id);
+                Assert.AreEqual(12, actual.Property.Id);
+                Assert.AreEqual(12, actual.Results[0].Property.Id);
+                Assert.AreEqual(13, actual.Results[1].Property.Id);
 
                 // Verify that the two scripts wer executed
-                Assert.AreEqual(2, result.Properties.RowCount);
+                Assert.AreEqual(2, result.Property.RowCount);
             }
         }
 
@@ -344,7 +341,7 @@ namespace xpf.IO.Test
             //Assert.AreEqual(13, actual.Results[1].Properties.Id);
 
             // Verify that the two scripts wer executed
-            Assert.AreEqual(2, result.Properties.RowCount);
+            Assert.AreEqual(2, result.Property.RowCount);
             }
             finally
             {
@@ -396,6 +393,25 @@ namespace xpf.IO.Test
             catch (SqlException ex)
             {
                 Assert.AreEqual("Timeout expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Execute_Result_has_properties_list()
+        {
+            using (var tx = new TransactionScope())
+            {
+                // Execute the two different scripts
+                var actual = new Script()
+                    .Database()
+                    .UsingScript("Execute_InsertRecord.sql") // Add one new record
+                    .WithIn(new {Id = 12})
+                    .UsingScript("Execute_InsertRecord.sql") // Add one new record
+                    .WithIn(new {Id = 13})
+                    .Execute();
+
+                Assert.AreEqual("Id", actual.Properties["Id"].Name);
+                Assert.AreEqual(12, actual.Properties["Id"].Value);
             }
         }
     }

@@ -1,22 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace xpf.Scripting
 {
-    public class ResultItem
-    {
-        public ResultItem(Dictionary<string, object> values)
-        {
-            this.Properties = new ResultProperties(values);
-        }
-
-        /// <summary>
-        /// Accesses the properties of the first executed script
-        /// </summary>
-        public dynamic Properties { get; private set; }
-    }
-
     public class Result
     {
         object syncLoc = new object();
@@ -28,13 +13,16 @@ namespace xpf.Scripting
             }
         }
 
-        public void AddResult(Dictionary<string, object> values)
+        public void AddResult(FieldList values)
         {
             lock (syncLoc)
             {
                 this.Results.Add(new ResultItem(values));
                 if (this.Results.Count == 1)
-                    this.Properties = this.Results[0].Properties;
+                {
+                    this.Property = this.Results[0].Property;
+                    this.Properties = values;
+                }
             }
         }
 
@@ -43,8 +31,9 @@ namespace xpf.Scripting
         /// <summary>
         /// Accesses the properties of the first executed script
         /// </summary>
-        public dynamic Properties { get; private set; }
+        public dynamic Property { get; private set; }
 
+        public FieldList Properties { get; private set; }
     }
 
     /*

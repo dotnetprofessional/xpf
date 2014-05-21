@@ -75,7 +75,7 @@ namespace xpf.Scripting.SQLServer
             return result;
         }
 
-        private Dictionary<string, object> Execute(ScriptDetail scriptDetail)
+        private FieldList Execute(ScriptDetail scriptDetail)
         {
 
             var dataAccess = GetDatabase();
@@ -117,9 +117,9 @@ namespace xpf.Scripting.SQLServer
 
             dataAccess.ExecuteNonQuery(c);
 
-            var values = new Dictionary<string, object>();
+            var values = new FieldList();
             foreach(DbParameter p in c.Parameters)
-                values.Add(p.ParameterName.Substring(1).ToLower(), p.Value);
+                values.Add(new Field(p.ParameterName.Substring(1), p.Value));
 
             return values;
         }

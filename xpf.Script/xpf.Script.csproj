@@ -41,8 +41,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmbeddedResources.cs" />
+    <Compile Include="Field.cs" />
+    <Compile Include="FieldList.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResultItem.cs" />
     <Compile Include="ResultProperties.cs" />
     <Compile Include="Script.cs" />
     <Compile Include="ScriptDetail.cs" />
