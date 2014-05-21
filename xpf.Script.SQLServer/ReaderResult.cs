@@ -16,9 +16,14 @@ namespace xpf.Scripting.SQLServer
             this.Fields = new Dictionary<string, object>();
             this.Field = new ReaderResultField(dataReader);
 
+            this.RecordsAffected = dataReader.RecordsAffected;
+
         }
 
         public dynamic Field { get; private set; }
+
+        public int RecordsAffected { get; private set; }
+
         public bool NextRecord()
         {
             var nextResult = this._dataReader.Read();
