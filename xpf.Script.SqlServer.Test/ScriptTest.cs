@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Transactions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using xpf.Scripting;
@@ -353,6 +354,48 @@ namespace xpf.IO.Test
                     .Database()
                     .UsingCommand("delete from TestTable where Id > 10")
                     .Execute();
+            }
+        }
+
+        [TestMethod]
+        public void Execute_Specifying_timeout_adjusts_time_allowed_for_command_execution()
+        {
+            try
+            {
+
+            // Specify a wait of 1 second and make script run for 2 seconds. This should fail!
+            new Script()
+                .Database()
+                .WithTimeout(1)
+                .UsingCommand("WAITFOR DELAY '00:00:02'")
+                .Execute();
+                
+                Assert.Fail("A timeout excepetion should have been raised");
+            }
+            catch (SqlException ex)
+            {
+                Assert.AreEqual("Timeout expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public void ExecuteReader_Specifying_timeout_adjusts_time_allowed_for_command_execution()
+        {
+            try
+            {
+
+                // Specify a wait of 1 second and make script run for 2 seconds. This should fail!
+                new Script()
+                    .Database()
+                    .WithTimeout(1)
+                    .UsingCommand("WAITFOR DELAY '00:00:02'")
+                    .ExecuteReader();
+
+                Assert.Fail("A timeout excepetion should have been raised");
+            }
+            catch (SqlException ex)
+            {
+                Assert.AreEqual("Timeout expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.", ex.Message);
             }
         }
     }

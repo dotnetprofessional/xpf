@@ -12,6 +12,8 @@ namespace xpf.Scripting.SQLServer
     {
         private string ConnectionString { get; set; }
         protected string DatabaseName { get; set; }
+        protected int Timeout { get; set; }
+
         public SqlScript(string databaseName)
         {
             this.DatabaseName = databaseName;
@@ -25,6 +27,12 @@ namespace xpf.Scripting.SQLServer
         public SqlScript WithConnectionString(string connectionString)
         {
             this.ConnectionString = connectionString;
+            return this;
+        }
+
+        public SqlScript WithTimeout(int timeoutInSeconds)
+        {
+            this.Timeout = timeoutInSeconds;
             return this;
         }
 
@@ -75,6 +83,7 @@ namespace xpf.Scripting.SQLServer
             string executionScript = scriptDetail.Command;
 
             var c = dataAccess.GetSqlStringCommand(executionScript);
+            if (this.Timeout != 0) c.CommandTimeout = Timeout;
 
             if (scriptDetail.OutParameters != null)
             {
@@ -130,6 +139,7 @@ namespace xpf.Scripting.SQLServer
             string executionScript = scriptDetail.Command;
 
             c = dataAccess.GetSqlStringCommand(executionScript);
+            if (this.Timeout != 0) c.CommandTimeout = Timeout;
 
             // Define the input parameters
             if (scriptDetail.InParameters != null)
